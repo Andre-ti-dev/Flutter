@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
 
-class MultiplicadorPage extends StatefulWidget {
-  MultiplicadorPage({Key? key}) : super(key: key);
+class AlcoolGasolinaPage extends StatefulWidget {
+  AlcoolGasolinaPage({Key? key}) : super(key: key);
 
   @override
-  State<MultiplicadorPage> createState() => _MultiplicadorPageState();
+  State<AlcoolGasolinaPage> createState() => _AlcoolGasolinaPageState();
 }
 
-class _MultiplicadorPageState extends State<MultiplicadorPage> {
-  TextEditingController n1Controller = TextEditingController();
-  TextEditingController n2Controller = TextEditingController();
+class _AlcoolGasolinaPageState extends State<AlcoolGasolinaPage> {
+  TextEditingController alcoolController = TextEditingController();
+  TextEditingController gasolinaController = TextEditingController();
 
-  String resultText = "Informe os números";
+  String resultText = "";
 
   void _multiplyNumbers() {
     setState(() {
-      double n1 = double.parse(n1Controller.text);
-      double n2 = double.parse(n2Controller.text);
+      double alcool = double.parse(alcoolController.text);
+      double gasolina = double.parse(gasolinaController.text);
 
-      double result = n1 * n2;
+      double result = alcool / gasolina;
 
-      resultText = 'Resultado: $resultado';
+      resultText = result <= 0.7 ? "Alcool" : "Gasolina";
     });
   }
 
@@ -36,7 +36,7 @@ class _MultiplicadorPageState extends State<MultiplicadorPage> {
   _appBar() {
     return AppBar(
       title: const Text(
-        "Multiplicador de Números",
+        "Alcool ou Gasolina",
         style: TextStyle(color: Colors.orange),
       ),
       centerTitle: true,
@@ -49,8 +49,9 @@ class _MultiplicadorPageState extends State<MultiplicadorPage> {
       padding: const EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
       child: Column(
         children: [
-          _numberInput("Digite o 1° número", n1Controller),
-          _numberInput("Digite o 2° número", n2Controller),
+          _image(),
+          _input("Preço do Alcool", alcoolController),
+          _input("Preço da Gasolina", gasolinaController),
           _button(),
           _result(resultText),
         ],
@@ -58,15 +59,17 @@ class _MultiplicadorPageState extends State<MultiplicadorPage> {
     );
   }
 
-  _result(value) {
-    return Text(
-      value,
-      textAlign: TextAlign.center,
-      style: const TextStyle(color: Colors.green, fontSize: 25.0),
+  _image() {
+    return Center(
+      child: Image.network(
+        'https://media.istockphoto.com/photos/woman-pumping-gasoline-fuel-in-car-at-gas-station-picture-id1314135899',
+        height: 150,
+        width: 150,
+      ),
     );
   }
 
-  _numberInput(label, controller) {
+  _input(label, controller) {
     return Container(
       margin: const EdgeInsets.only(top: 24.0),
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -95,11 +98,19 @@ class _MultiplicadorPageState extends State<MultiplicadorPage> {
         width: double.infinity,
         child: RaisedButton(
           onPressed: _multiplyNumbers,
-          child: const Text("Calcular",
+          child: const Text("Verificar",
               style: TextStyle(color: Colors.white, fontSize: 20.0)),
-          color: Colors.blue,
+          color: Colors.green,
         ),
       ),
+    );
+  }
+
+  _result(value) {
+    return Text(
+      value,
+      textAlign: TextAlign.center,
+      style: const TextStyle(color: Colors.red, fontSize: 25.0),
     );
   }
 }

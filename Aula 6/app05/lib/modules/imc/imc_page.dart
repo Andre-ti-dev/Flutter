@@ -1,26 +1,31 @@
 import 'package:flutter/material.dart';
 
-class MultiplicadorPage extends StatefulWidget {
-  MultiplicadorPage({Key? key}) : super(key: key);
+class IMCPage extends StatefulWidget {
+  IMCPage({Key? key}) : super(key: key);
 
   @override
-  State<MultiplicadorPage> createState() => _MultiplicadorPageState();
+  State<IMCPage> createState() => _IMCPageState();
 }
 
-class _MultiplicadorPageState extends State<MultiplicadorPage> {
-  TextEditingController n1Controller = TextEditingController();
-  TextEditingController n2Controller = TextEditingController();
+class _IMCPageState extends State<IMCPage> {
+  TextEditingController pesoController = TextEditingController();
+  TextEditingController alturaController = TextEditingController();
 
-  String resultText = "Informe os números";
+  String resultText = "";
 
   void _multiplyNumbers() {
     setState(() {
-      double n1 = double.parse(n1Controller.text);
-      double n2 = double.parse(n2Controller.text);
+      double peso = double.parse(pesoController.text);
+      double altura = double.parse(alturaController.text);
 
-      double result = n1 * n2;
+      double result = peso / (altura * 2);
 
-      resultText = 'Resultado: $resultado';
+      if (result < 18.5) resultText = "Abaixo do Peso";
+      if (result >= 18.5 && result < 25) resultText = "Peso Normal";
+      if (result >= 25 && result < 30) resultText = "Sobrepeso";
+      if (result >= 30 && result < 35) resultText = "Obesidade Grau I";
+      if (result >= 35 && result < 40) resultText = "Obesidade Grau II";
+      if (result >= 40) resultText = "Obesidade Grau III ou Mórbida";
     });
   }
 
@@ -36,7 +41,7 @@ class _MultiplicadorPageState extends State<MultiplicadorPage> {
   _appBar() {
     return AppBar(
       title: const Text(
-        "Multiplicador de Números",
+        "Cálculo do IMC",
         style: TextStyle(color: Colors.orange),
       ),
       centerTitle: true,
@@ -49,8 +54,9 @@ class _MultiplicadorPageState extends State<MultiplicadorPage> {
       padding: const EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
       child: Column(
         children: [
-          _numberInput("Digite o 1° número", n1Controller),
-          _numberInput("Digite o 2° número", n2Controller),
+          _image(),
+          _input("Peso", pesoController),
+          _input("Altura", alturaController),
           _button(),
           _result(resultText),
         ],
@@ -58,15 +64,17 @@ class _MultiplicadorPageState extends State<MultiplicadorPage> {
     );
   }
 
-  _result(value) {
-    return Text(
-      value,
-      textAlign: TextAlign.center,
-      style: const TextStyle(color: Colors.green, fontSize: 25.0),
+  _image() {
+    return Center(
+      child: Image.network(
+        'https://images.unsplash.com/photo-1522844990619-4951c40f7eda?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
+        height: 150,
+        width: 150,
+      ),
     );
   }
 
-  _numberInput(label, controller) {
+  _input(label, controller) {
     return Container(
       margin: const EdgeInsets.only(top: 24.0),
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -95,11 +103,19 @@ class _MultiplicadorPageState extends State<MultiplicadorPage> {
         width: double.infinity,
         child: RaisedButton(
           onPressed: _multiplyNumbers,
-          child: const Text("Calcular",
+          child: const Text("Verificar",
               style: TextStyle(color: Colors.white, fontSize: 20.0)),
-          color: Colors.blue,
+          color: Colors.green,
         ),
       ),
+    );
+  }
+
+  _result(value) {
+    return Text(
+      value,
+      textAlign: TextAlign.center,
+      style: const TextStyle(color: Colors.red, fontSize: 25.0),
     );
   }
 }
